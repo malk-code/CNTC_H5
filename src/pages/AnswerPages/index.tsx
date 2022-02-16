@@ -6,10 +6,9 @@
  * @description 答题页面
  */
 import { Component } from 'react'
-import { View, Text, Image, ScrollView, Button } from '@tarojs/components'
+import { View, Text, Image, ScrollView, Button, Input } from '@tarojs/components'
 import './index.less'
 import TipsIndex from './components/Tips/tips'
-import SubTitle from './components/SubTItle'
 import CheckboxItem from './components/CheckboxItem'
 import SliderItem from './components/SliderItem'
 
@@ -48,21 +47,21 @@ export default class AnswerPagesIndex extends Component<any, any> {
 
 					{/* 信息 */}
 					<View className='answer_pages_infocontainer'>
-						<View>
+						<View style={{ display: "flex" }}>
 							<Text>评价人员:</Text>
-							<Text style={{ marginLeft: "10px" }}>xxxx</Text>
+							<Input className='answer_pages_infocontainer_input' style={{ width: "50%", marginLeft: "5px" }} />
 						</View>
-						<View>
+						<View style={{ display: "flex" }}>
 							<Text>评吸日期:</Text>
-							<Text style={{ marginLeft: "2px" }}>2022年1月17日</Text>
+							<Input className='answer_pages_infocontainer_input' style={{ width: "50%", marginLeft: "5px" }} />
 						</View>
-						<View>
+						<View >
 							<Text>对比样生产信息:</Text>
-							<Text></Text>
+							<Input className='answer_pages_infocontainer_input' />
 						</View>
 						<View>
 							<Text>评价样生产信息:</Text>
-							<Text>xxxx</Text>
+							<Input className='answer_pages_infocontainer_input' />
 						</View>
 					</View>
 					{/* 答题正文部分 */}
