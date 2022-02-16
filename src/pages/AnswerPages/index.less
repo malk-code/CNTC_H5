@@ -1,7 +1,7 @@
 #AnswerPages {
   width: 100%;
-  height: 100%;
   background-color: #fefde6;
+  padding-bottom: 100px;
   .answer_pages {
     &_topImages {
       width: 100%;
@@ -34,11 +34,12 @@
         line-height: 100%;
       }
     }
+    //  信息填写部分
     &_infocontainer {
       display: grid;
+      box-sizing: border-box;
       grid-template-columns: 1fr 1fr;
       grid-template-rows: 1fr 1fr;
-      box-sizing: border-box;
       width: 100%;
       padding: 0 35px;
       font-size: 30px;
@@ -46,6 +47,41 @@
       grid-row-gap: 20px;
       color: #4f4836;
       font-weight: 500;
+    }
+    // 答题部分
+    &_questioncontainer {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 0 35px;
+      margin-top: 30px;
+    }
+    &_message {
+      width: 100%;
+      padding: 0 30px;
+      color: #4f4836;
+      font-size: 20px;
+      box-sizing: border-box;
+      margin-top: 50px;
+      font-weight: 600;
+    }
+    &_numcontainer {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 0 35px;
+      margin-top: 100px;
+    }
+    // 按钮
+    &_buttoncontainer {
+      width: 80%;
+      height: 100px;
+      margin: auto;
+      margin-top: 70px;
+      &_button {
+        width: 100%;
+        border-radius: 100px;
+        background-color: #d1ae7d;
+        color: #fff;
+      }
     }
   }
 }

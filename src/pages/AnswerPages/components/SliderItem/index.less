@@ -1,0 +1,34 @@
+.SliderItemStyles {
+  width: 100%;
+  margin-top: 30px;
+  box-sizing: border-box;
+  position: relative;
+  &_range {
+    margin-top: 30px;
+    width: 100%;
+    color: #d2af7c;
+    background-color: #d2af7c;
+    display: block;
+    height: 2px;
+    overflow: visible;
+    -webkit-appearance: none;
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      background-color: #d2af7c;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: 0.3s ease-in-out;
+    }
+  }
+  &_text {
+    padding: 0 20px;
+    margin-top: 30px;
+    color: #d2af7c;
+    font-size: 20px;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+  }
+}
