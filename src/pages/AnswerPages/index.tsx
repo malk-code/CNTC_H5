@@ -14,6 +14,7 @@ import SliderItem from './components/SliderItem'
 
 const IMAGEURL = require('../../assets/images/cntc_top.png')
 
+// 本项目所有的借口字段拼音错误众多都是后端定义 -- 2.17
 export default class AnswerPagesIndex extends Component<any, any> {
 	constructor(props: any) {
 		super(props)
@@ -69,26 +70,31 @@ export default class AnswerPagesIndex extends Component<any, any> {
 
 						{/* 信息 */}
 						<View className='answer_pages_infocontainer' >
-							<View style={{ display: "flex" }} >
+							<View >
 								<Text>评价人员:</Text>
-								<Input className='answer_pages_infocontainer_input' style={{ marginLeft: "5px", flex: 1 }} name="personName" />
+								<Input className='answer_pages_infocontainer_input' name="evaluate_name" />
 							</View>
-							<View style={{ display: "flex" }}>
+							<View style={{ marginTop: '10px' }}>
 								<Text>评吸日期:</Text>
-								<Picker mode='date' name='date' onChange={(e) => { this.setState({ timeSel: e.detail.value }) }} value={timeSel} className='answer_pages_infocontainer_input' style={{ marginLeft: "5px", flex: 1 }}>
+								<Picker mode='date' name='evaluate_time' onChange={(e) => { this.setState({ timeSel: e.detail.value }) }} value={timeSel} className='answer_pages_infocontainer_input' style={{ display: 'block', height: '20px' }}>
 									<View style={{ flex: 1 }}>
 										{this.state.timeSel}
 									</View>
 								</Picker>
 							</View>
-							<View style={{ gridColumnStart: 1, gridColumnEnd: 3, gridRowStart: 2, gridRowEnd: 2 }}>
+							<View style={{ marginTop: '10px' }}>
+								<Text>产品名称:</Text>
+								<Input className='answer_pages_infocontainer_input' name='product_name' />
+							</View>
+							<View style={{ marginTop: '10px' }}>
 								<Text>对比样生产信息:</Text>
-								<Input className='answer_pages_infocontainer_input' name='contrastInfo' />
+								<Input className='answer_pages_infocontainer_input' name='compare_production_info' />
 							</View>
-							<View style={{ gridColumnStart: 1, gridColumnEnd: 3, gridRowStart: 3, gridRowEnd: 3 }}>
+							<View style={{ marginTop: '10px' }}>
 								<Text>评价样生产信息:</Text>
-								<Input className='answer_pages_infocontainer_input' name='evaluationInfo' />
+								<Input className='answer_pages_infocontainer_input' name='evaluate_production_info' />
 							</View>
+
 						</View>
 						{/* 答题正文部分 */}
 						<View className='answer_pages_questioncontainer'>
@@ -104,7 +110,7 @@ export default class AnswerPagesIndex extends Component<any, any> {
 									{ name: "拉带不齐", value: 4 },
 								]}
 								onChange={(data) => {
-									this.setState({ submitObj: { ...submitObj, boxLook: data } })
+									this.setState({ submitObj: { ...submitObj, facade_tiaohe: data?.selectArr, facade_tiaohe_qt: data?.otherInfo } })
 								}}
 							/>
 							<CheckboxItem
@@ -117,7 +123,7 @@ export default class AnswerPagesIndex extends Component<any, any> {
 									{ name: "内衬纸拉出不完整", value: 5 },
 								]}
 								onChange={(data) => {
-									this.setState({ submitObj: { ...submitObj, litterBoxLook: data } })
+									this.setState({ submitObj: { ...submitObj, facade_xiaohe: data?.selectArr, facade_xiaohe_qt: data?.otherInfo } })
 								}}
 							/>
 							<CheckboxItem
@@ -127,7 +133,7 @@ export default class AnswerPagesIndex extends Component<any, any> {
 									{ name: "嘴端烟末 点", value: 2, },
 								]}
 								onChange={(data) => {
-									this.setState({ submitObj: { ...submitObj, litterBoxSmoke: data } })
+									this.setState({ submitObj: { ...submitObj, facade_xiaohe_yanmo: data?.selectArr, facade_xiaohe_yanmo_qt: data?.otherInfo } })
 								}}
 
 							/>
@@ -142,7 +148,7 @@ export default class AnswerPagesIndex extends Component<any, any> {
 									{ name: "打孔不均匀", value: 6 },
 								]}
 								onChange={(data) => {
-									this.setState({ submitObj: { ...submitObj, smokeLook: data } })
+									this.setState({ submitObj: { ...submitObj, facade_yanzhi: data?.selectArr, facade_yanzhi_qt: data?.otherInfo } })
 								}}
 							/>
 							<CheckboxItem
@@ -154,7 +160,7 @@ export default class AnswerPagesIndex extends Component<any, any> {
 									{ name: "过软", value: 4 },
 								]}
 								onChange={(data) => {
-									this.setState({ submitObj: { ...submitObj, firecrackersInfo: data } })
+									this.setState({ submitObj: { ...submitObj, facade_baozhu: data?.selectArr, facade_baozhu_qt: data?.otherInfo } })
 								}}
 							/>
 						</View>
@@ -171,28 +177,28 @@ export default class AnswerPagesIndex extends Component<any, any> {
 							<TipsIndex
 								title='内在感官对比评吸质量'
 							/>
-							<SliderItem title='烟支嗅香' onChange={(data) => { this.setState({ submitObj: { ...submitObj, smokeSmall: data } }) }} />
-							<SliderItem title='香气特征' onChange={(data) => { this.setState({ submitObj: { ...submitObj, smallCharacteristics: data } }) }} />
-							<SliderItem title='香气质' onChange={(data) => { this.setState({ submitObj: { ...submitObj, smokeSmall: data } }) }} />
-							<SliderItem title='杂气' onChange={(data) => { this.setState({ submitObj: { ...submitObj, small: data } }) }} />
-							<SliderItem title='香气量' onChange={(data) => { this.setState({ submitObj: { ...submitObj, smallTotal: data } }) }} />
-							<SliderItem title='口腔刺激' onChange={(data) => { this.setState({ submitObj: { ...submitObj, oralStimulation: data } }) }} />
-							<SliderItem title='鼻腔刺激' onChange={(data) => { this.setState({ submitObj: { ...submitObj, nasalStimulation: data } }) }} />
-							<SliderItem title='喉部刺激' onChange={(data) => { this.setState({ submitObj: { ...submitObj, throatStimulation: data } }) }} />
-							<SliderItem title='余味' onChange={(data) => { this.setState({ submitObj: { ...submitObj, aftertaste: data } }) }} />
-							<SliderItem title='劲头' onChange={(data) => { this.setState({ submitObj: { ...submitObj, momentum: data } }) }} />
-							<SliderItem title='烟气浓度' onChange={(data) => { this.setState({ submitObj: { ...submitObj, concentration: data } }) }} />
-							<SliderItem title='轻松感' onChange={(data) => { this.setState({ submitObj: { ...submitObj, relax: data } }) }} />
-							<SliderItem title='整体均衡性' onChange={(data) => { this.setState({ submitObj: { ...submitObj, equilibrium: data } }) }} />
+							<SliderItem title='烟支嗅香' onChange={(data) => { this.setState({ submitObj: { ...submitObj, inner_xq_tzxx_dzy: data?.contrast, inner_xq_tzxx_pjy: data?.evaluation, inner_xq_tzxx_qt: data?.textValue, } }) }} />
+							<SliderItem title='香气特征' onChange={(data) => { this.setState({ submitObj: { ...submitObj, inner_xq_xqtz_dzy: data?.contrast, inner_xq_xqtz_pjy: data?.evaluation, inner_xq_xqtz_qt: data?.textValue, } }) }} />
+							<SliderItem title='香气质' onChange={(data) => { this.setState({ submitObj: { ...submitObj, inner_xq_xqz_dzy: data?.contrast, inner_xq_xqz_pjy: data?.evaluation, inner_xq_xqz_qt: data?.textValue, } }) }} />
+							<SliderItem title='杂气' onChange={(data) => { this.setState({ submitObj: { ...submitObj, inner_zhaqi_dzy: data?.contrast, inner_zhaqi_pjy: data?.evaluation, inner_zhaqi_qt: data?.textValue, } }) }} />
+							<SliderItem title='香气量' onChange={(data) => { this.setState({ submitObj: { ...submitObj, inner_xq_xql_dzy: data?.contrast, inner_xq_xql_pjy: data?.evaluation, inner_xq_xql_qt: data?.textValue, } }) }} />
+							<SliderItem title='口腔刺激' onChange={(data) => { this.setState({ submitObj: { ...submitObj, inner_cjx_kqcj_dzy: data?.contrast, inner_cjx_kqcj_pjy: data?.evaluation, inner_cjx_kqcj_qt: data?.textValue, } }) }} />
+							<SliderItem title='鼻腔刺激' onChange={(data) => { this.setState({ submitObj: { ...submitObj, inner_cjx_bjcj_dzy: data?.contrast, inner_cjx_bjcj_pjy: data?.evaluation, inner_cjx_bjcj_qt: data?.textValue, } }) }} />
+							<SliderItem title='喉部刺激' onChange={(data) => { this.setState({ submitObj: { ...submitObj, inner_cjx_hbcj_dzy: data?.contrast, inner_cjx_hbcj_pjy: data?.evaluation, inner_cjx_hbcj_qt: data?.textValue, } }) }} />
+							<SliderItem title='余味' onChange={(data) => { this.setState({ submitObj: { ...submitObj, inner_yuwei_dzy: data?.contrast, inner_yuwei_pjy: data?.evaluation, inner_yuwei_qt: data?.textValue, } }) }} />
+							<SliderItem title='劲头' onChange={(data) => { this.setState({ submitObj: { ...submitObj, inner_jintou_dzy: data?.contrast, inner_jintou_pjy: data?.evaluation, inner_jintou_qt: data?.textValue, } }) }} />
+							<SliderItem title='烟气浓度' onChange={(data) => { this.setState({ submitObj: { ...submitObj, inner_yanqinongdu_dzy: data?.contrast, inner_yanqinongdu_pjy: data?.evaluation, inner_yanqinongdu_qt: data?.textValue, } }) }} />
+							<SliderItem title='轻松感' onChange={(data) => { this.setState({ submitObj: { ...submitObj, inner_qingsonggan_dzy: data?.contrast, inner_qingsonggan_pjy: data?.evaluation, inner_qingsonggan_qt: data?.textValue, } }) }} />
+							<SliderItem title='整体均衡性' onChange={(data) => { this.setState({ submitObj: { ...submitObj, inner_ztjhx_dzy: data?.contrast, inner_ztjhx_pjy: data?.evaluation, inner_ztjhx_qt: data?.textValue, } }) }} />
 						</View>
 
 						<View className='answer_pages_numcontainer'>
 							<TipsIndex
 								title='燃烧性'
 							/>
-							<SliderItem title='燃烧圈' onChange={(data) => { this.setState({ submitObj: { ...submitObj, burning: data } }) }} />
-							<SliderItem title='燃烧锥' onChange={(data) => { this.setState({ submitObj: { ...submitObj, equilibrium: data } }) }} />
-							<SliderItem title='包灰' onChange={(data) => { this.setState({ submitObj: { ...submitObj, packageAsh: data } }) }} />
+							<SliderItem title='燃烧圈' onChange={(data) => { this.setState({ submitObj: { ...submitObj, burn_ranshouquan_dzy: data?.contrast, burn_ranshouquan_pjy: data?.evaluation, burn_ranshouquan_qt: data?.textValue, } }) }} />
+							<SliderItem title='燃烧锥' onChange={(data) => { this.setState({ submitObj: { ...submitObj, burn_ranshaozhui_dzy: data?.contrast, burn_ranshaozhui_pjy: data?.evaluation, burn_ranshaozhui_qt: data?.textValue, } }) }} />
+							<SliderItem title='包灰' onChange={(data) => { this.setState({ submitObj: { ...submitObj, burn_baohui_dzy: data?.contrast, burn_baohui_pjy: data?.evaluation, burn_baohui_qt: data?.textValue, } }) }} />
 						</View>
 						{/* 按钮 */}
 						<View className='answer_pages_buttoncontainer'>
