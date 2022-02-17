@@ -11,18 +11,21 @@ type Props = {
 }
 
 type State = {
+    romanArr: string[]
 }
 
 export default class NewAnswerSliderItem extends Component<Props, State>{
     constructor(props: any) {
         super(props)
         this.state = {
+            romanArr: ['I', 'II', 'III']
         }
     }
 
 
     render() {
         const { title, onChange, silderArr } = this.props
+        const { romanArr } = this.state
         return (
             <View className='SliderItemStyles'>
                 <SubTitle title={title} />
@@ -38,7 +41,7 @@ export default class NewAnswerSliderItem extends Component<Props, State>{
                     />
                     <View className='SliderItemStyles_text'>
                         {
-                            silderArr && silderArr.sort().map((item) => (
+                            romanArr && romanArr.map((item) => (
                                 <Text>{item}</Text>
                             ))
                         }
