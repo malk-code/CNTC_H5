@@ -103,7 +103,7 @@ export default class AnswerPagesIndex extends Component<any, any> {
 				/>
 				<View className='answer_pages_container'>
 					{/* 倒计时 */}
-					<Form onSubmit={(e) => { console.log({ ...submitObj, ...e.detail.value }) }}>
+					<Form onSubmit={(e) => { this.onSubmit(e.detail.value) }}>
 						<View className='answer_pages_notescontainer'>
 							<View className='answer_pages_notescontainer_pointer'></View>
 							<Text className='answer_pages_notescontainer_notes' >{`本评价表填写时间为10分钟，倒计时  ${min}:${sec < 10 ? '0' + sec : sec}`}</Text>
