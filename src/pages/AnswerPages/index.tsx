@@ -11,6 +11,8 @@ import './index.less'
 import TipsIndex from './components/Tips/tips'
 import CheckboxItem from './components/CheckboxItem'
 import SliderItem from './components/SliderItem'
+import Taro from '@tarojs/taro'
+import Request from '../../service/api'
 
 const IMAGEURL = require('../../assets/images/cntc_top.png')
 
@@ -30,6 +32,12 @@ export default class AnswerPagesIndex extends Component<any, any> {
 		this.countDown()
 	}
 
+	/**
+	 * @author ClearLuvMoki
+	 * @filename index.tsx
+	 * @date 2022-02-18 星期五
+	 * @description 倒计时
+	 */
 	countDown = () => {
 		const { min, sec } = this.state
 		if (min > 0) {
@@ -49,6 +57,38 @@ export default class AnswerPagesIndex extends Component<any, any> {
 		setTimeout(() => {
 			this.countDown();
 		}, 1000);
+	}
+
+	/**
+	 * @author ClearLuvMoki
+	 * @filename index.tsx
+	 * @date 2022-02-18 星期五
+	 * @description 提交
+	 */
+	onSubmit = (formValue: any): void => {
+		const { submitObj } = this.state
+		if (!formValue?.evaluate_name) {
+			Taro.showToast({ title: "请填写评价人员", icon: "error" })
+			return
+		} else if (!formValue?.product_name) {
+			Taro.showToast({ title: "请填写产品名称", icon: "error" })
+			return
+		} else if (!formValue?.evaluate_time) {
+			Taro.showToast({ title: "请填写评吸日期", icon: "error" })
+			return
+		}
+		delete formValue[""]
+		this.setState({ loading: true })
+		Request.post("zy/evaluate/insert", { ...formValue, ...submitObj }).then(
+			(res: any) => {
+				if (res?.success) {
+					Taro.showToast({ title: "填写成功", icon: "success" })
+				} else {
+					Taro.showToast({ title: "数据填写错误", icon: "error" })
+				}
+			}
+		).finally(() => { this.setState({ loading: false }) })
+
 	}
 
 

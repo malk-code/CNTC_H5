@@ -10,6 +10,8 @@ import { View, Text, Image, ScrollView, Button, Input, Picker, Form } from '@tar
 import './index.less'
 import TipsIndex from './components/Tips/tips'
 import NewAnswerSliderItem from './components/NewAnswerSliderItem/index'
+import Request from '../../service/api'
+import Taro from '@tarojs/taro'
 
 const IMAGEURL = require('../../assets/images/cntc_top.png')
 
@@ -25,6 +27,7 @@ type State = {
 	},
 	min: number,
 	sec: number
+	loading: boolean
 }
 
 // 本项目所有的借口字段拼音错误众多都是后端定义 -- 2.17
@@ -42,7 +45,8 @@ export default class NewAnswerPagesIndex extends Component<any, State> {
 				yuwei: [20, 22, 25][0]
 			},
 			min: 10,
-			sec: 0
+			sec: 0,
+			loading: false
 		}
 	}
 
@@ -50,6 +54,12 @@ export default class NewAnswerPagesIndex extends Component<any, State> {
 		this.countDown()
 	}
 
+	/**
+	 * @author ClearLuvMoki
+	 * @filename index.tsx
+	 * @date 2022-02-18 星期五
+	 * @description 倒计时
+	 */
 	countDown = () => {
 		const { min, sec } = this.state
 		if (min > 0) {
@@ -72,8 +82,41 @@ export default class NewAnswerPagesIndex extends Component<any, State> {
 	}
 
 
+	/**
+	 * @author ClearLuvMoki
+	 * @filename index.tsx
+	 * @date 2022-02-18 星期五
+	 * @description 提交
+	 */
+	onSubmit = (formValue: any): void => {
+		const { submitObj } = this.state
+		if (!formValue?.sample_name) {
+			Taro.showToast({ title: "请填写样品名称", icon: "error" })
+			return
+		} else if (!formValue?.evaluate_user) {
+			Taro.showToast({ title: "请填写样品名称", icon: "error" })
+			return
+		} else if (!formValue?.evaluate_time) {
+			Taro.showToast({ title: "请填写评吸日期", icon: "error" })
+			return
+		}
+		delete formValue[""]
+		this.setState({ loading: true })
+		Request.post("zy/evaluate/insert", { ...formValue, ...submitObj }).then(
+			(res: any) => {
+				if (res?.success) {
+					Taro.showToast({ title: "填写成功", icon: "success" })
+				} else {
+					Taro.showToast({ title: "数据填写错误", icon: "error" })
+				}
+			}
+		).finally(() => { this.setState({ loading: false }) })
+
+	}
+
+
 	render() {
-		const { timeSel, submitObj, min, sec } = this.state
+		const { timeSel, submitObj, min, sec, loading } = this.state
 		return (
 			<ScrollView id='AnswerPages'>
 				<Image
@@ -82,7 +125,7 @@ export default class NewAnswerPagesIndex extends Component<any, State> {
 				/>
 				<View className='answer_pages_container'>
 					{/* 倒计时 */}
-					<Form onSubmit={(e) => { console.log({ ...submitObj, ...e.detail.value }), console.log(submitObj) }}>
+					<Form onSubmit={(e) => { this.onSubmit(e.detail.value) }}>
 						<View className='answer_pages_notescontainer'>
 							<View className='answer_pages_notescontainer_pointer'></View>
 							<Text className='answer_pages_notescontainer_notes' >{`本评价表填写时间为10分钟，倒计时  ${min}:${sec < 10 ? '0' + sec : sec}`}</Text>
@@ -154,7 +197,7 @@ export default class NewAnswerPagesIndex extends Component<any, State> {
 
 						{/* 按钮 */}
 						<View className='answer_pages_buttoncontainer'>
-							<Button disabled={min === 0 && sec === 0} formType="submit" type='primary' className='answer_pages_buttoncontainer_button'>已填写好提交</Button>
+							<Button loading={loading} disabled={min === 0 && sec === 0} formType="submit" type='primary' className='answer_pages_buttoncontainer_button'>已填写好提交</Button>
 						</View>
 					</Form>
 				</View>
