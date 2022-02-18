@@ -1,3 +1,3 @@
 export default {
-    navigationBarTitleText: '试卷页'
+    navigationBarTitleText: '消费者评吸表'
 }

@@ -1,3 +1,3 @@
 export default {
-    navigationBarTitleText: '试卷页'
+    navigationBarTitleText: '原始记录表'
 }
