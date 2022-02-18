@@ -24,7 +24,8 @@ export default class AnswerPagesIndex extends Component<any, any> {
 			timeSel: '',
 			submitObj: {},
 			min: 10,
-			sec: 0
+			sec: 0,
+			loading: false
 		}
 	}
 
@@ -93,7 +94,7 @@ export default class AnswerPagesIndex extends Component<any, any> {
 
 
 	render() {
-		const { timeSel, submitObj, min, sec } = this.state
+		const { timeSel, submitObj, min, sec, loading } = this.state
 		return (
 			<ScrollView id='AnswerPages'>
 				<Image
@@ -242,7 +243,7 @@ export default class AnswerPagesIndex extends Component<any, any> {
 						</View>
 						{/* 按钮 */}
 						<View className='answer_pages_buttoncontainer'>
-							<Button disabled={min === 0 && sec === 0} formType="submit" type='primary' className='answer_pages_buttoncontainer_button'>已填写好提交</Button>
+							<Button loading={loading} disabled={min === 0 && sec === 0} formType="submit" type='primary' className='answer_pages_buttoncontainer_button'>已填写好提交</Button>
 						</View>
 					</Form>
 				</View>
