@@ -80,7 +80,7 @@ export default class AnswerPagesIndex extends Component<any, any> {
 		}
 		delete formValue[""]
 		this.setState({ loading: true })
-		Request.post("zy/evaluate/insert", { ...formValue, ...submitObj }).then(
+		Request.post("zy/record/insert", { ...formValue, ...submitObj }).then(
 			(res: any) => {
 				if (res?.success) {
 					Taro.showToast({ title: "填写成功", icon: "success" })
