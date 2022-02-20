@@ -26,10 +26,6 @@ export default class AnswerPagesIndex extends Component<any, any> {
 			min: 10,
 			sec: 0,
 			loading: false,
-      initData: {
-        product_name: "",
-        evaluate_time: ""
-      }
 		}
 	}
 
@@ -40,7 +36,8 @@ export default class AnswerPagesIndex extends Component<any, any> {
   componentDidMount() {
     if (!location.href.includes("production")) return
     const production = location.href.split("production=");
-    this.setState({ initData: { ...this.state.initData, product_name: production[1].split("&date=")[0], evaluate_time: production[1].split("date=")[1] } })
+    const date =  production[1].split("date=")[1];
+    this.setState({ submitObj: { ...this.state.submitObj, product_name: production[1].split("&date=")[0] }, timeSel: date })
   }
 
 	/**
@@ -104,7 +101,7 @@ export default class AnswerPagesIndex extends Component<any, any> {
 
 
 	render() {
-		const { timeSel, submitObj, min, sec, loading, initData } = this.state
+		const { timeSel, submitObj, min, sec, loading } = this.state
 		return (
 			<ScrollView id='AnswerPages'>
 				<Image
@@ -123,13 +120,13 @@ export default class AnswerPagesIndex extends Component<any, any> {
 						<View className='answer_pages_infocontainer' >
               <View style={{ marginTop: '10px' }}>
 								<Text className='answer_pages_infocontainer_title'>产品名称:</Text>
-								<Input className='answer_pages_infocontainer_input' name='product_name' value={initData.product_name} />
+								<Input className='answer_pages_infocontainer_input' name='product_name' value={submitObj.product_name} />
 							</View>
 							<View style={{ marginTop: '10px' }}>
 								<Text className='answer_pages_infocontainer_title'>评吸日期:</Text>
 								<Picker mode='date' name='evaluate_time' onChange={(e) => { this.setState({ timeSel: e.detail.value }) }} value={timeSel} className='answer_pages_infocontainer_input' style={{ display: 'block', height: '20px' }}>
 									<View style={{ flex: 1 }}>
-                  {this.state.timeSel ? this.state.timeSel : this.state.initData.evaluate_time }
+                  {this.state.timeSel }
 									</View>
 								</Picker>
 							</View>

@@ -23,15 +23,12 @@ type State = {
 		xiediao: number,
 		zaqi: number,
 		cijixing: number,
-		yuwei: number
+		yuwei: number,
 	},
 	min: number,
 	sec: number
 	loading: boolean,
-  initData: {
-    sample_name: string,
-    evaluate_time: string
-  }
+  sample_name: string
 }
 
 // 本项目所有的借口字段拼音错误众多都是后端定义 -- 2.17
@@ -51,10 +48,7 @@ export default class NewAnswerPagesIndex extends Component<any, State> {
 			min: 10,
 			sec: 0,
 			loading: false,
-      initData: {
-        sample_name: "",
-        evaluate_time: ""
-      }
+      sample_name: ""
     }
 	}
 
@@ -65,7 +59,8 @@ export default class NewAnswerPagesIndex extends Component<any, State> {
   componentDidMount() {
     if (!location.href.includes("production")) return
     const production = location.href.split("production=");
-    this.setState({ initData: { ...this.state.initData, sample_name: production[1].split("&date=")[0], evaluate_time: production[1].split("date=")[1] } })
+    const date =  production[1].split("date=")[1];
+    this.setState({ sample_name: production[1].split("&date=")[0], timeSel: date })
   }
 
 	/**
@@ -128,7 +123,7 @@ export default class NewAnswerPagesIndex extends Component<any, State> {
 	}
 
 	render() {
-		const { timeSel, submitObj, min, sec, loading, initData } = this.state
+		const { timeSel, submitObj, min, sec, loading, sample_name } = this.state
 		return (
 			<ScrollView id='AnswerPages'>
 				<Image
@@ -147,13 +142,13 @@ export default class NewAnswerPagesIndex extends Component<any, State> {
 						<View className='answer_pages_infocontainer' >
 							<View style={{ marginTop: '10px' }}>
 								<Text className='answer_pages_infocontainer-title'>样品名称:</Text>
-								<Input className='answer_pages_infocontainer_input' name='sample_name' value={initData.sample_name} />
+								<Input className='answer_pages_infocontainer_input' name='sample_name' value={sample_name} />
 							</View>
 							<View style={{ marginTop: '10px' }}>
 								<Text className='answer_pages_infocontainer-title'>评吸日期:</Text>
 								<Picker mode='date' name='evaluate_time' onChange={(e) => { this.setState({ timeSel: e.detail.value }) }} value={timeSel} className='answer_pages_infocontainer_input' style={{ display: 'block', height: '20px' }}>
 									<View style={{ flex: 1 }}>
-										{this.state.timeSel ? this.state.timeSel : this.state.initData.evaluate_time }
+										{this.state.timeSel }
 									</View>
 								</Picker>
 							</View>
