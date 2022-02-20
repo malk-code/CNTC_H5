@@ -11,7 +11,7 @@ import './index.less'
 import TipsIndex from './components/Tips/tips'
 import NewAnswerSliderItem from './components/NewAnswerSliderItem/index'
 import Request from '../../service/api'
-import Taro from '@tarojs/taro'
+import Taro, { initPxTransform } from '@tarojs/taro'
 
 const IMAGEURL = require('../../assets/images/cntc_top.png')
 
@@ -27,7 +27,11 @@ type State = {
 	},
 	min: number,
 	sec: number
-	loading: boolean
+	loading: boolean,
+  initData: {
+    sample_name: string,
+    evaluate_time: string
+  }
 }
 
 // 本项目所有的借口字段拼音错误众多都是后端定义 -- 2.17
@@ -42,17 +46,27 @@ export default class NewAnswerPagesIndex extends Component<any, State> {
 				xiediao: [4, 5, 6][0],
 				zaqi: [8, 10, 12][0],
 				cijixing: [15, 17, 20][0],
-				yuwei: [20, 22, 25][0]
+				yuwei: [20, 22, 25][0],
 			},
 			min: 10,
 			sec: 0,
-			loading: false
-		}
+			loading: false,
+      initData: {
+        sample_name: "",
+        evaluate_time: ""
+      }
+    }
 	}
 
 	componentWillMount() {
 		this.countDown()
 	}
+
+  componentDidMount() {
+    if (!location.href.includes("production")) return
+    const production = location.href.split("production=");
+    this.setState({ initData: { ...this.state.initData, sample_name: production[1].split("&date=")[0], evaluate_time: production[1].split("date=")[1] } })
+  }
 
 	/**
 	 * @author ClearLuvMoki
@@ -74,7 +88,6 @@ export default class NewAnswerPagesIndex extends Component<any, State> {
 			}
 		} else {
 			return
-
 		}
 		setTimeout(() => {
 			this.countDown();
@@ -114,9 +127,8 @@ export default class NewAnswerPagesIndex extends Component<any, State> {
 
 	}
 
-
 	render() {
-		const { timeSel, submitObj, min, sec, loading } = this.state
+		const { timeSel, submitObj, min, sec, loading, initData } = this.state
 		return (
 			<ScrollView id='AnswerPages'>
 				<Image
@@ -134,24 +146,22 @@ export default class NewAnswerPagesIndex extends Component<any, State> {
 						{/* 信息 */}
 						<View className='answer_pages_infocontainer' >
 							<View style={{ marginTop: '10px' }}>
-								<Text>样品名称:</Text>
-								<Input className='answer_pages_infocontainer_input' name='sample_name' />
+								<Text className='answer_pages_infocontainer-title'>样品名称:</Text>
+								<Input className='answer_pages_infocontainer_input' name='sample_name' value={initData.sample_name} />
 							</View>
 							<View style={{ marginTop: '10px' }}>
-								<Text>评吸者:</Text>
-								<Input className='answer_pages_infocontainer_input' name="evaluate_user" />
-							</View>
-							<View style={{ marginTop: '10px' }}>
-								<Text>评吸日期:</Text>
+								<Text className='answer_pages_infocontainer-title'>评吸日期:</Text>
 								<Picker mode='date' name='evaluate_time' onChange={(e) => { this.setState({ timeSel: e.detail.value }) }} value={timeSel} className='answer_pages_infocontainer_input' style={{ display: 'block', height: '20px' }}>
 									<View style={{ flex: 1 }}>
-										{this.state.timeSel}
+										{this.state.timeSel ? this.state.timeSel : this.state.initData.evaluate_time }
 									</View>
 								</Picker>
 							</View>
+              <View style={{ marginTop: '10px' }}>
+								<Text>评吸者:</Text>
+								<Input className='answer_pages_infocontainer_input' name="evaluate_user" />
+							</View>
 						</View>
-
-
 						<View className='answer_pages_numcontainer'>
 							<TipsIndex
 								title='内在感官对比评吸质量'
@@ -161,31 +171,37 @@ export default class NewAnswerPagesIndex extends Component<any, State> {
 								silderArr={[3, 4, 5]}
 								onChange={(data) => { this.setState({ submitObj: { ...submitObj, guangze: [3, 4, 5][data] } }) }}
 							/>
+              <Input type='number' className='answer_pages_numcontainer_input' value={submitObj.guangze.toString()} onInput={ target => this.setState({ submitObj: { ...submitObj, guangze: Number(target.detail.value) } }) } />
 							<NewAnswerSliderItem
 								title='香气'
 								silderArr={[24, 28, 32]}
 								onChange={(data) => { this.setState({ submitObj: { ...submitObj, xiangqi: [24, 28, 32][data] } }) }}
 							/>
+              <Input type='number' className='answer_pages_numcontainer_input' value={submitObj.xiangqi.toString()} onInput={ target => this.setState({ submitObj: { ...submitObj, xiangqi: Number(target.detail.value) } }) } />
 							<NewAnswerSliderItem
-								title='协调'
+								title='谐调'
 								silderArr={[4, 5, 6]}
 								onChange={(data) => { this.setState({ submitObj: { ...submitObj, xiediao: [4, 5, 6][data] } }) }}
 							/>
+              <Input type='number' className='answer_pages_numcontainer_input' value={submitObj.xiediao.toString()} onInput={ target => this.setState({ submitObj: { ...submitObj, xiediao: Number(target.detail.value) } }) } />
 							<NewAnswerSliderItem
 								title='杂气'
 								silderArr={[8, 10, 12]}
 								onChange={(data) => { this.setState({ submitObj: { ...submitObj, zaqi: [8, 10, 12][data] } }) }}
 							/>
+              <Input type='number' className='answer_pages_numcontainer_input' value={submitObj.zaqi.toString()} onInput={ target => this.setState({ submitObj: { ...submitObj, zaqi: Number(target.detail.value) } }) } />
 							<NewAnswerSliderItem
 								title='刺激性'
 								silderArr={[15, 17, 20]}
 								onChange={(data) => { this.setState({ submitObj: { ...submitObj, cijixing: [15, 17, 20][data] } }) }}
 							/>
+              <Input type='number' className='answer_pages_numcontainer_input' value={submitObj.cijixing.toString()} onInput={ target => this.setState({ submitObj: { ...submitObj, cijixing: Number(target.detail.value) } }) } />
 							<NewAnswerSliderItem
 								title='余味'
 								silderArr={[20, 22, 25]}
 								onChange={(data) => { this.setState({ submitObj: { ...submitObj, yuwei: [20, 22, 25][data] } }) }}
 							/>
+              <Input type='number' className='answer_pages_numcontainer_input' value={submitObj.yuwei.toString()} onInput={ target => this.setState({ submitObj: { ...submitObj, yuwei: Number(target.detail.value) } }) } />
 						</View>
 
 						<View className='answer_pages_total'>

@@ -25,13 +25,23 @@ export default class AnswerPagesIndex extends Component<any, any> {
 			submitObj: {},
 			min: 10,
 			sec: 0,
-			loading: false
+			loading: false,
+      initData: {
+        product_name: "",
+        evaluate_time: ""
+      }
 		}
 	}
 
 	componentWillMount() {
 		this.countDown()
 	}
+
+  componentDidMount() {
+    if (!location.href.includes("production")) return
+    const production = location.href.split("production=");
+    this.setState({ initData: { ...this.state.initData, product_name: production[1].split("&date=")[0], evaluate_time: production[1].split("date=")[1] } })
+  }
 
 	/**
 	 * @author ClearLuvMoki
@@ -68,7 +78,7 @@ export default class AnswerPagesIndex extends Component<any, any> {
 	 */
 	onSubmit = (formValue: any): void => {
 		const { submitObj } = this.state
-		if (!formValue?.evaluate_name) {
+		if (!formValue?.evaluate_user) {
 			Taro.showToast({ title: "请填写评价人员", icon: "error" })
 			return
 		} else if (!formValue?.product_name) {
@@ -80,7 +90,7 @@ export default class AnswerPagesIndex extends Component<any, any> {
 		}
 		delete formValue[""]
 		this.setState({ loading: true })
-		Request.post("zy/record/insert", { ...formValue, ...submitObj }).then(
+		Request.post("zy/evaluate/insert", { ...formValue, ...submitObj }).then(
 			(res: any) => {
 				if (res?.success) {
 					Taro.showToast({ title: "填写成功", icon: "success" })
@@ -94,7 +104,7 @@ export default class AnswerPagesIndex extends Component<any, any> {
 
 
 	render() {
-		const { timeSel, submitObj, min, sec, loading } = this.state
+		const { timeSel, submitObj, min, sec, loading, initData } = this.state
 		return (
 			<ScrollView id='AnswerPages'>
 				<Image
@@ -111,21 +121,21 @@ export default class AnswerPagesIndex extends Component<any, any> {
 
 						{/* 信息 */}
 						<View className='answer_pages_infocontainer' >
-							<View >
-								<Text>评价人员:</Text>
-								<Input className='answer_pages_infocontainer_input' name="evaluate_name" />
+              <View style={{ marginTop: '10px' }}>
+								<Text className='answer_pages_infocontainer_title'>产品名称:</Text>
+								<Input className='answer_pages_infocontainer_input' name='product_name' value={initData.product_name} />
 							</View>
 							<View style={{ marginTop: '10px' }}>
-								<Text>评吸日期:</Text>
+								<Text className='answer_pages_infocontainer_title'>评吸日期:</Text>
 								<Picker mode='date' name='evaluate_time' onChange={(e) => { this.setState({ timeSel: e.detail.value }) }} value={timeSel} className='answer_pages_infocontainer_input' style={{ display: 'block', height: '20px' }}>
 									<View style={{ flex: 1 }}>
-										{this.state.timeSel}
+                  {this.state.timeSel ? this.state.timeSel : this.state.initData.evaluate_time }
 									</View>
 								</Picker>
 							</View>
-							<View style={{ marginTop: '10px' }}>
-								<Text>产品名称:</Text>
-								<Input className='answer_pages_infocontainer_input' name='product_name' />
+              <View style={{ marginTop: '10px' }}>
+								<Text>评价人员:</Text>
+								<Input className='answer_pages_infocontainer_input' name="evaluate_user" />
 							</View>
 							<View style={{ marginTop: '10px' }}>
 								<Text>对比样生产信息:</Text>

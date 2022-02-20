@@ -41,8 +41,11 @@ export default class NewAnswerSliderItem extends Component<Props, State>{
                     />
                     <View className='SliderItemStyles_text'>
                         {
-                            romanArr && romanArr.map((item) => (
-                                <Text>{item}</Text>
+                            romanArr && romanArr.map((item, index) => (
+                              <view>
+                                <View>{item}</View>
+                                <View>{silderArr[index]}</View>
+                              </view>
                             ))
                         }
                     </View>
